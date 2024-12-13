@@ -1,6 +1,6 @@
 ﻿namespace Simulator;
 
-public class Creature
+public abstract class Creature
 {
     private string name = "Unknown";
     private int level = 1;
@@ -50,7 +50,7 @@ public class Creature
             level++;
     }
     public string Info => $"Name: {Name}, Level: {Level}";
-    public void SayHi()
+    public virtual void SayHi()
     {
         Console.WriteLine($"Hi! I'm {Name}, level {Level}.");
     }
@@ -73,4 +73,6 @@ public class Creature
         Direction[] parsedDirections = DirectionParser.Parse(directions);
         Go(parsedDirections);
     }
+
+    public abstract int Power { get; }
 }
