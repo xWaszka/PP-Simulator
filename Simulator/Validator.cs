@@ -10,23 +10,29 @@ public static class Validator
     }
     public static string Shortener(string value, int min, int max, char placeholder)
     {
-        if (value == null) return new string(placeholder, min);
+        if (value == null)
+            return new string(placeholder, min);
 
-        string trimmed = value.Trim();
+        string trimmed = value.Trim().Replace(" ", "");
+
+        if (trimmed.Length == 0)
+            return new string(placeholder, min);
+
         if (trimmed.Length < min)
         {
-            trimmed = trimmed.PadRight(min, placeholder);
-            trimmed = char.ToUpper(trimmed[0]) + trimmed.Substring(1).ToLower();
+
+            trimmed = char.ToUpper(trimmed[0]) + new string(placeholder, min - 1);
         }
         else if (trimmed.Length > max)
         {
             trimmed = trimmed.Substring(0, max);
+            trimmed = char.ToUpper(trimmed[0]) + trimmed.Substring(1).ToLower();
         }
         else
         {
-            if (char.IsLower(trimmed[0]))
-                trimmed = char.ToUpper(trimmed[0]) + trimmed.Substring(1).ToLower();
+            trimmed = char.ToUpper(trimmed[0]) + trimmed.Substring(1).ToLower();
         }
+
         return trimmed;
     }
 }
