@@ -18,13 +18,14 @@ public class Orc : Creature
         init => rage = Validator.Limiter(value, 0, 10);
     }
 
-    public override void SayHi() => Console.WriteLine(
-    $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.");
+    public override string Greeting()
+    {
+        return $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
+    }
 
     public void Hunt()
     {
         huntCount++;
-        Console.WriteLine($"{Name} is hunting.");
         if (huntCount % 2 == 0 && rage < 10)
         {
             rage++;

@@ -30,28 +30,26 @@ public abstract class Creature
     }
     public abstract string Info { get; }
 
-    public virtual void SayHi()
+
+    public virtual string Greeting()
     {
-        Console.WriteLine($"Hi! I'm {Name}, level {Level}.");
+        return ($"Hi! I'm {Name}, level {Level}.");
     }
 
-    public void Go(Direction direction)
+    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
+    public string[] Go(Direction[] directions)
     {
-        string directionText = direction.ToString().ToLower();
-        Console.WriteLine($"{Name} goes {directionText}.");
-    }
-    public void Go(Direction[] directions)
-    {
-        foreach (var direction in directions)
+        string[] result = new string[directions.Length];
+        for (int i = 0; i < directions.Length; i++)
         {
-            Go(direction);
+            result[i] = Go(directions[i]);
         }
+        return result;
     }
-
-    public void Go(string directions)
+    public string[] Go(string directions)
     {
         Direction[] parsedDirections = DirectionParser.Parse(directions);
-        Go(parsedDirections);
+        return Go(parsedDirections);
     }
     public override string ToString()
     {
