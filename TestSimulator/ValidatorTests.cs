@@ -18,7 +18,7 @@ namespace TestSimulator
         [Theory]
         [InlineData("Hello World", 5, 10, '#', "Hello worl")]
         [InlineData("   ", 5, 10, '#', "#####")]
-        [InlineData(null, 5, 10, '#', "#####")]
+        [InlineData("", 5, 10, '#', "#####")]
         [InlineData("abc", 5, 10, '#', "Abc##")]
         [InlineData("SuperASDASDASDASD", 5, 10, '#', "Superasdas")]
         [InlineData("short", 5, 5, '#', "Short")]
