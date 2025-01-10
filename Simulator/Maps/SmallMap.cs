@@ -24,7 +24,12 @@ public abstract class SmallMap : Map
     {
         if (!Exist(point)) throw new ArgumentOutOfRangeException("Point is outside the map.");
 
-        _field[point.X, point.Y]?.Add(creature);
+        if (_field[point.X, point.Y] == null)
+        {
+            _field[point.X, point.Y] = new List<Creature>();
+        }
+
+        _field[point.X, point.Y].Add(creature);
     }
 
     public override List<Creature> At(Point point)
@@ -56,9 +61,13 @@ public abstract class SmallMap : Map
     }
     public override void Move(Creature creature, Point point)
     {
-        Remove(creature, creature.Position);
-        creature.Position = point;
-        Add(creature, point);
-    }
+        if (!Exist(point))
+        {
+            throw new ArgumentOutOfRangeException(nameof(point), "Point is out of bounds.");
+        }
 
+        Remove(creature, creature.Position);
+        Add(creature, point);
+        creature.Position = point;
+    }
 }
