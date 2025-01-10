@@ -4,7 +4,7 @@ namespace Simulator.Maps;
 public abstract class SmallMap : Map
 {
 
-    private List<Creature>?[,] _field;
+    private List<IMappable>?[,] _field;
 
     protected SmallMap(int sizeX, int sizeY) : base(sizeX, sizeY)
     {
@@ -17,57 +17,59 @@ public abstract class SmallMap : Map
             throw new ArgumentOutOfRangeException(nameof(sizeY));
         }
 
-        _field = new List<Creature>?[sizeX, sizeY];
+        _field = new List<IMappable>?[sizeX, sizeY];
     }
 
-    public override void Add(Creature creature, Point point)
+    public override void Add(IMappable mappable, Point point)
     {
         if (!Exist(point)) throw new ArgumentOutOfRangeException("Point is outside the map.");
 
         if (_field[point.X, point.Y] == null)
         {
-            _field[point.X, point.Y] = new List<Creature>();
+            _field[point.X, point.Y] = new List<IMappable>();
         }
 
-        _field[point.X, point.Y].Add(creature);
+        _field[point.X, point.Y].Add(mappable);
     }
 
-    public override List<Creature> At(Point point)
+    public override List<IMappable> At(Point point)
     {
         if (!Exist(point))
         {
             throw new ArgumentOutOfRangeException(nameof(point), "Point is out of bounds.");
         }
 
-        return _field[point.X, point.Y] ?? new List<Creature>();
+        return _field[point.X, point.Y] ?? new List<IMappable>();
     }
 
-    public override List<Creature> At(int x, int y)
+    public override List<IMappable> At(int x, int y)
     {
         return At(new Point(x, y));
     }
-    public override void Remove(Creature creature, Point point)
+
+    public override void Remove(IMappable mappable, Point point)
     {
         if (!Exist(point))
         {
             throw new ArgumentOutOfRangeException(nameof(point), "Point is out of bounds.");
         }
 
-        var creaturesAtPoint = _field[point.X, point.Y];
-        if (creaturesAtPoint != null && creaturesAtPoint.Contains(creature))
+        var mappablesAtPoint = _field[point.X, point.Y];
+        if (mappablesAtPoint != null && mappablesAtPoint.Contains(mappable))
         {
-            creaturesAtPoint.Remove(creature);
+            mappablesAtPoint.Remove(mappable);
         }
     }
-    public override void Move(Creature creature, Point point)
+
+    public override void Move(IMappable mappable, Point point)
     {
         if (!Exist(point))
         {
             throw new ArgumentOutOfRangeException(nameof(point), "Point is out of bounds.");
         }
 
-        Remove(creature, creature.Position);
-        Add(creature, point);
-        creature.Position = point;
+        Remove(mappable, mappable.Position);
+        Add(mappable, point);
+        mappable.Position = point;
     }
 }

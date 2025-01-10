@@ -2,7 +2,7 @@
 namespace Simulator;
 
 
-public abstract class Creature
+public abstract class Creature : IMappable
 {
     public Map? Maps { get; set; }
     public Point Position { get; set; }

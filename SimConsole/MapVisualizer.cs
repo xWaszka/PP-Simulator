@@ -89,12 +89,12 @@ public class MapVisualizer
         Console.Write($" {symbol} ");
     }
 
-    private static string GetCellSymbol(List<Creature> creatures)
+    public static string GetCellSymbol(List<IMappable> mappables)
     {
-        return creatures.Count switch
+        return mappables.Count switch
         {
             0 => " ",
-            1 => creatures[0] switch
+            1 => mappables[0] switch
             {
                 Orc => "O",
                 Elf => "E",

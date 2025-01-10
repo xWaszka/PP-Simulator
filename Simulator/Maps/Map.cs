@@ -13,12 +13,11 @@ public abstract class Map
 
     private readonly Rectangle _map;
 
-    public abstract void Add(Creature creature, Point point);
-    public abstract void Remove(Creature creature , Point point);
-    public abstract void Move(Creature creature, Point point);
-   
-    public abstract List<Creature> At(Point point);
-    public abstract List<Creature> At(int x, int y);
+    public abstract void Add(IMappable mappable, Point point);
+    public abstract void Remove(IMappable mappable, Point point);
+    public abstract void Move(IMappable mappable, Point point);
+    public abstract List<IMappable> At(Point point);
+    public abstract List<IMappable> At(int x, int y);
     protected Map(int sizeX, int sizeY)
     {
         if (sizeX < 5)
