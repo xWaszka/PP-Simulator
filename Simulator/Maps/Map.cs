@@ -15,11 +15,8 @@ public abstract class Map
 
     public abstract void Add(Creature creature, Point point);
     public abstract void Remove(Creature creature , Point point);
-    public void Move(Creature creature, Point point)
-    {
-        Remove(creature, point);
-        Add(creature, point);
-    }
+    public abstract void Move(Creature creature, Point point);
+   
     public abstract List<Creature> At(Point point);
     public abstract List<Creature> At(int x, int y);
     protected Map(int sizeX, int sizeY)

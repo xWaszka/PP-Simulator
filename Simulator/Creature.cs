@@ -9,7 +9,9 @@ public abstract class Creature
 
     public void InitMapAndPosition(Map map, Point position)
     {
-        //Map.Add()
+        Maps = map;
+        Position = position;
+        map.Add(this, position);
     }
 
 
@@ -49,23 +51,15 @@ public abstract class Creature
 
     public void Go(Direction direction)
     {
-        // użyc
-        //Map.Next()
-        //Map.Move()
-    }
-    public string[] Go(Direction[] directions)
-    {
-        string[] result = new string[directions.Length];
-        for (int i = 0; i < directions.Length; i++)
+        if (Maps == null)
         {
-            result[i] = Go(directions[i]);
+            throw new InvalidOperationException("Stwór nie jest przypisany do mapy.");
         }
-        return result;
-    }
-    public string[] Go(string directions)
-    {
-        Direction[] parsedDirections = DirectionParser.Parse(directions);
-        return Go(parsedDirections);
+
+        Point newPosition = Maps.Next(Position, direction);
+
+        Maps.Move(this, newPosition);
+        Position = newPosition;
     }
     public override string ToString()
     {
