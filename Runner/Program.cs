@@ -61,6 +61,4 @@ internal class Program
             Console.WriteLine(direction);
         }
     }
-
-
 }

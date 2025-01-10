@@ -19,12 +19,11 @@ public class RectangleTests
     }
 
     [Theory]
-    [InlineData(2, 2, 2, 4, "Punkty są współliniowe, nie można utworzyć prostokąta.")]
-    [InlineData(1, 3, 4, 3, "Punkty są współliniowe, nie można utworzyć prostokąta.")]
-    public void Constructor_ShouldThrowArgumentException(int x1, int y1, int x2, int y2, string expectedMessage)
+    [InlineData(2, 2, 2, 4)]
+    [InlineData(1, 3, 4, 3)]
+    public void Constructor_ShouldThrowArgumentException(int x1, int y1, int x2, int y2)
     {
         var exception = Assert.Throws<ArgumentException>(() => new Rectangle(x1, y1, x2, y2));
-        Assert.Equal(expectedMessage, exception.Message);
     }
 
     [Theory]

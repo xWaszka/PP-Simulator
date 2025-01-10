@@ -1,19 +1,10 @@
 ﻿namespace Simulator.Maps
 {
-    public class SmallTorusMap : Map
+    public class SmallTorusMap : SmallMap
     {
         public int Size { get; }
-        public SmallTorusMap(int size)
+        public SmallTorusMap(int sizeX, int sizeY) : base(sizeX, sizeY)
         {
-            if (size < 5 || size > 20)
-            {
-                throw new ArgumentOutOfRangeException(nameof(size), "Wielkość mapy musi być miedzy 5 a 20");
-            }
-            Size = size;
-        }
-        public override bool Exist(Point p)
-        {
-            return p.X >= 0 && p.X < Size && p.Y >= 0 && p.Y < Size;
         }
         public override Point Next(Point p, Direction d)
         {
