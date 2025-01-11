@@ -55,15 +55,15 @@ public abstract class Creature : IMappable
         {
             throw new InvalidOperationException("Stwór nie jest przypisany do mapy.");
         }
-
         Point newPosition = Maps.Next(Position, direction);
-
         Maps.Move(this, newPosition);
         Position = newPosition;
     }
+
     public override string ToString()
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
     }
     public abstract int Power { get; }
+    public abstract char Symbol { get; }
 }

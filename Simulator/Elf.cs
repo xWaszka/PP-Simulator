@@ -4,6 +4,7 @@ public class Elf : Creature
 {
     private int agility = 1;
     private int singCount = 0;
+    public override char Symbol => 'E';
 
     public Elf() : base() { }
 

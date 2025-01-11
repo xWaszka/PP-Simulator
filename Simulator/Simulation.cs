@@ -40,22 +40,32 @@ public class Simulation
     /// Makes one move of current creature in current direction.
     /// Throw error if simulation is finished.
     /// </summary>
-    public void Turn()
+ public void Turn()
+{
+    if (Finished)
     {
-        if (Finished)
-        {
-            throw new InvalidOperationException("The simulation is already finished.");
-        }
-
-        var directions = DirectionParser.Parse(Moves);
-        if (_currentTurnIndex >= directions.Count)
-        {
-            Finished = true;
-            return;
-        }
-
-        var direction = directions[_currentTurnIndex % directions.Count];
-        CurrentCreature.Go(direction);
-        _currentTurnIndex++;
+        throw new InvalidOperationException("The simulation is already finished.");
     }
+
+    var directions = DirectionParser.Parse(Moves);
+
+    if (_currentTurnIndex >= directions.Count)
+    {
+        Finished = true;
+        return;
+    }
+
+    var currentDirection = directions[_currentTurnIndex];
+    try
+    {
+        CurrentCreature.Go(currentDirection);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Błąd podczas ruchu: {ex.Message}");
+    }
+
+    _currentTurnIndex++;
+}
+
 }

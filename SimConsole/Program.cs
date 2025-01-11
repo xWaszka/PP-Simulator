@@ -1,20 +1,41 @@
 ﻿using System.Text;
-using Simulator.Maps;
+using SimConsole;
 using Simulator;
-
-namespace SimConsole;
+using Simulator.Maps;
 
 public class Program
 {
-
     static void Main(string[] args)
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        SmallSquareMap map = new(5);
-        List<Creature> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
-        List<Point> points = [new(2, 2), new(3, 1)];
-        string moves = "dlrludl";
+        SmallTorusMap map = new SmallTorusMap(8, 6);
+
+        List<IMappable> creatures = new List<IMappable>
+        {
+            new Elf("Legolas", 5, 8),
+            new Orc("Gorbag", 3, 7),
+            new Animals { Name = "Rabbits" },
+            new Birds { Name = "Eagles", CanFly = true },
+            new Birds { Name = "Ostriches", CanFly = false },
+        };
+
+        string moves = "rdullddulllrurl";
+        if (string.IsNullOrWhiteSpace(moves))
+        {
+            throw new InvalidOperationException("Ciąg ruchów jest pusty lub nieprawidłowy.");
+        }
+
+        Console.WriteLine($"Ciąg ruchów: {moves}");
+
+        List<Point> points = new List<Point>
+        {
+            new Point(1, 1),
+            new Point(2, 1),
+            new Point(3, 4),
+            new Point(6, 1),
+            new Point(1, 4),
+        };
 
         Simulation simulation = new(map, creatures, points, moves);
         MapVisualizer mapVisualizer = new(simulation.Map);
@@ -26,25 +47,38 @@ public class Program
         {
             Console.WriteLine($"{creature.Name} na pozycji {creature.Position}");
         }
+
         Console.WriteLine("\nNaciśnij Enter, aby rozpocząć symulację...");
         Console.ReadKey(true);
 
+        int turnCount = 1;
         while (!simulation.Finished)
         {
-            Console.Clear();
-
-
-            Console.WriteLine($"Ruch: {simulation.CurrentCreature.Name} idzie w kierunku {simulation.CurrentMoveName}");
-            simulation.Turn();
-            mapVisualizer.Draw();
-
-            Console.WriteLine("\nStworzenia na mapie:");
-            foreach (var creature in creatures)
+            try
             {
-                Console.WriteLine($"{creature.Name} na pozycji {creature.Position}");
+                mapVisualizer.Draw();
+                Console.WriteLine($"Tura {turnCount} - Ruch: {simulation.CurrentCreature.Name} idzie w kierunku {simulation.CurrentMoveName}");
+                Console.WriteLine($"Pozycja przed ruchem: {simulation.CurrentCreature.Position}");
+                simulation.Turn();
+                Console.WriteLine($"Pozycja po ruchu: {simulation.CurrentCreature.Position}");
+                turnCount++;
+                
+
+                Console.WriteLine("\nStworzenia na mapie:");
+                foreach (var creature in creatures)
+                {
+                    Console.WriteLine($"{creature.Name} na pozycji {creature.Position}");
+                }
+
+                Console.WriteLine("\nNaciśnij Enter, aby przejść do następnej tury...");
+                Console.ReadKey(true);
             }
-            Console.WriteLine("\nNaciśnij Enter, aby przejść do następnego ruchu...");
-            Console.ReadKey(true);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nWystąpił błąd: {ex.Message}");
+                Console.WriteLine("Symulacja zostaje zatrzymana.");
+                break;
+            }
         }
 
         Console.WriteLine("\nSymulacja zakończona!");

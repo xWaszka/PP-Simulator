@@ -1,8 +1,6 @@
 ﻿using SimConsole;
 using Simulator.Maps;
 
-namespace Simulator;
-
 public class MapVisualizer
 {
     private readonly Map _map;
@@ -15,6 +13,7 @@ public class MapVisualizer
 
     public void Draw()
     {
+        Console.Clear();
         DrawTopBorder();
         DrawRows();
         DrawBottomBorder();
@@ -91,17 +90,11 @@ public class MapVisualizer
 
     public static string GetCellSymbol(List<IMappable> mappables)
     {
-        return mappables.Count switch
+        if (mappables.Count > 1)
         {
-            0 => " ",
-            1 => mappables[0] switch
-            {
-                Orc => "O",
-                Elf => "E",
-                _ => "?"
-            },
-            _ => "X"
-        };
+            return "X";
+        }
+        return mappables.Count == 1 ? mappables[0].Symbol.ToString() : " ";
     }
 
     private static void DrawHorizontalLine()

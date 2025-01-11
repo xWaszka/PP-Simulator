@@ -4,6 +4,7 @@ public class Orc : Creature
 {
     private int rage = 1;
     private int huntCount = 0;
+    public override char Symbol => 'O';
 
     public Orc() : base() { }
 
