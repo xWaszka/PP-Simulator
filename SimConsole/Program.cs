@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using SimConsole;
 using Simulator;
 using Simulator.Maps;
 
@@ -20,7 +19,7 @@ public class Program
             new Birds { Name = "Ostriches", CanFly = false },
         };
 
-        string moves = "rdullddulllrurl";
+        string moves = "rdurlddurldruul";
         if (string.IsNullOrWhiteSpace(moves))
         {
             throw new InvalidOperationException("Ciąg ruchów jest pusty lub nieprawidłowy.");
@@ -38,6 +37,7 @@ public class Program
         };
 
         Simulation simulation = new(map, creatures, points, moves);
+        SimulationHistory history = new(simulation);
         MapVisualizer mapVisualizer = new(simulation.Map);
 
         Console.WriteLine("Początkowy stan mapy:");
@@ -52,17 +52,21 @@ public class Program
         Console.ReadKey(true);
 
         int turnCount = 1;
-        while (!simulation.Finished)
+        history.LogTurn();
+
+        while (!simulation.Finished && turnCount <= 15)
         {
             try
             {
+                Console.Clear();
+                Console.WriteLine($"Tura {turnCount}");
                 mapVisualizer.Draw();
-                Console.WriteLine($"Tura {turnCount} - Ruch: {simulation.CurrentCreature.Name} idzie w kierunku {simulation.CurrentMoveName}");
+                Console.WriteLine($"Ruch: {simulation.CurrentCreature.Name} idzie w kierunku {simulation.CurrentMoveName}");
                 Console.WriteLine($"Pozycja przed ruchem: {simulation.CurrentCreature.Position}");
+
                 simulation.Turn();
+                history.LogTurn();
                 Console.WriteLine($"Pozycja po ruchu: {simulation.CurrentCreature.Position}");
-                turnCount++;
-                
 
                 Console.WriteLine("\nStworzenia na mapie:");
                 foreach (var creature in creatures)
@@ -70,8 +74,13 @@ public class Program
                     Console.WriteLine($"{creature.Name} na pozycji {creature.Position}");
                 }
 
-                Console.WriteLine("\nNaciśnij Enter, aby przejść do następnej tury...");
-                Console.ReadKey(true);
+                turnCount++;
+
+                if (!simulation.Finished && turnCount <= 15)
+                {
+                    Console.WriteLine("\nNaciśnij Enter, aby przejść do następnej tury...");
+                    Console.ReadKey(true);
+                }
             }
             catch (Exception ex)
             {
@@ -81,7 +90,25 @@ public class Program
             }
         }
 
-        Console.WriteLine("\nSymulacja zakończona!");
+        Console.WriteLine("\nSymulacja zakończona!\n");
+
+        foreach (var turnNumber in new[] { 5, 10, 15 })
+        {
+            if (turnNumber <= history.TurnLogs.Count)
+            {
+                var log = history.TurnLogs[turnNumber - 1];
+                Console.WriteLine($"\nStan mapy po {turnNumber} turze:");
+                foreach (var symbol in log.Symbols)
+                {
+                    Console.WriteLine($"Pozycja: {symbol.Key}, Symbol: {symbol.Value}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"\nNie osiągnięto {turnNumber} tury w symulacji.");
+            }
+        }
+
         Console.ReadKey(true);
     }
 }
